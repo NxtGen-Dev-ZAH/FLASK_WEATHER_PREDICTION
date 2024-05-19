@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Prediction App</title>
+</head>
+<body >
+
+    <h1>Weather Prediction</h1>
+
+    <form id="weatherForm">
+        <label for="minTemp">Min Temperature:</label>
+        <input type="text" id="minTemp" name="minTemp" required>
+        <br>
+
+        <label for="maxTemp">Max Temperature:</label>
+        <input type="text" id="maxTemp" name="maxTemp" required>
+        <br>
+
+        <label for="rainfall">Rainfall:</label>
+        <input type="text" id="rainfall" name="rainfall" required>
+        <br>
+
+        <label for="evaporation">Evaporation:</label>
+        <input type="text" id="evaporation" name="evaporation" required>
+        <br>
+
+        <label for="sunshine">Sunshine:</label>
+        <input type="text" id="sunshine" name="sunshine" required>
+        <br>
+
+        <label for="windGustSpeed">Wind Gust Speed:</label>
+        <input type="text" id="windGustSpeed" name="windGustSpeed" required>
+        <br>
+
+        <label for="windSpeed9am">Wind Speed 9am:</label>
+        <input type="text" id="windSpeed9am" name="windSpeed9am" required>
+        <br>
+
+        <label for="windSpeed3pm">Wind Speed 3pm:</label>
+        <input type="text" id="windSpeed3pm" name="windSpeed3pm" required>
+        <br>
+
+        <label for="humidity9am">Humidity 9am:</label>
+        <input type="text" id="humidity9am" name="humidity9am" required>
+        <br>
+
+        <label for="humidity3pm">Humidity 3pm:</label>
+        <input type="text" id="humidity3pm" name="humidity3pm" required>
+        <br>
+
+        <label for="pressure9am">Pressure 9am:</label>
+        <input type="text" id="pressure9am" name="pressure9am" required>
+        <br>
+
+        <label for="pressure3pm">Pressure 3pm:</label>
+        <input type="text" id="pressure3pm" name="pressure3pm" required>
+        <br>
+
+        <label for="cloud9am">Cloud 9am:</label>
+        <input type="text" id="cloud9am" name="cloud9am" required>
+        <br>
+
+        <label for="cloud3pm">Cloud 3pm:</label>
+        <input type="text" id="cloud3pm" name="cloud3pm" required>
+        <br>
+
+        <label for="temp9am">Temperature 9am:</label>
+        <input type="text" id="temp9am" name="temp9am" required>
+        <br>
+
+        <label for="temp3pm">Temperature 3pm:</label>
+        <input type="text" id="temp3pm" name="temp3pm" required>
+        <br>
+
+        <label for="rainToday">Rain Today (0 for No, 1 for Yes):</label>
+        <input type="text" id="rainToday" name="rainToday" required>
+        <br>
+
+        <label for="selectedModel">Select Model:</label>
+        <select id="selectedModel" name="selectedModel" required>
+            <option value="Linear Regression">Linear Regression</option>
+            <option value="KNN">KNN</option>
+            <option value="Decision Tree">Decision Tree</option>
+            <option value="Logistic Regression">Logistic Regression</option>
+            <option value="SVM">SVM</option>
+        </select>
+        <br>
+
+        <button type="button" onclick="predictWeather()">Predict</button>
+    </form>
+
+    <div id="predictionResult"></div>
+
+    <script>
+        function predictWeather() {
+            // Get form data
+            var formData = {
+                "input_data": [
+                    parseFloat(document.getElementById("minTemp").value),
+                    parseFloat(document.getElementById("maxTemp").value),
+                    parseFloat(document.getElementById("rainfall").value),
+                    parseFloat(document.getElementById("evaporation").value),
+                    parseFloat(document.getElementById("sunshine").value),
+                    parseFloat(document.getElementById("windGustSpeed").value),
+                    parseFloat(document.getElementById("windSpeed9am").value),
+                    parseFloat(document.getElementById("windSpeed3pm").value),
+                    parseFloat(document.getElementById("humidity9am").value),
+                    parseFloat(document.getElementById("humidity3pm").value),
+                    parseFloat(document.getElementById("pressure9am").value),
+                    parseFloat(document.getElementById("pressure3pm").value),
+                    parseFloat(document.getElementById("cloud9am").value),
+                    parseFloat(document.getElementById("cloud3pm").value),
+                    parseFloat(document.getElementById("temp9am").value),
+                    parseFloat(document.getElementById("temp3pm").value),
+                    parseFloat(document.getElementById("rainToday").value),
+                ],
+                "selected_model": document.getElementById("selectedModel").value
+            };
+
+            // Make an AJAX request to Flask server
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the prediction result
+                document.getElementById("predictionResult").innerHTML = "Prediction: " + data.prediction;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById("predictionResult").innerHTML = "Error: " + error.message;
+            });
+        }
+    </script>
+
+</body>
+</html>
